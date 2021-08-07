@@ -1,0 +1,7 @@
+"Kepad_Driver/keypad.o"
+"LCD_Driver/lcd.o"
+"Src/main.o"
+"Src/syscalls.o"
+"Src/sysmem.o"
+"Startup/startup_stm32f103c6tx.o"
+"stm32_f103c6_Drivers/stm32_f103c6_gpio_drivers.o"
