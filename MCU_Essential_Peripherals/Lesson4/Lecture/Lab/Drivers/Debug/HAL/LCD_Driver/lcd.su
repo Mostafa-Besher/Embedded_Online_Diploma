@@ -1,0 +1,10 @@
+lcd.c:16:6:delay_ms	24	static
+lcd.c:23:6:lcd_init	16	static
+lcd.c:84:6:lcd_kick	8	static
+lcd.c:91:6:lcd_write_char	16	static
+lcd.c:121:6:lcd_write_string	24	static
+lcd.c:145:6:lcd_is_busy	16	static
+lcd.c:169:6:lcd_write_command	16	static
+lcd.c:200:6:lcd_goto_xy	16	static
+lcd.c:219:6:lcd_clear	8	static
+lcd.c:224:6:lcd_shift_right	8	static
