@@ -1,0 +1,253 @@
+
+SPI_EIGHT_7Segments.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000130  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000184  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000184  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001b4  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000058  00000000  00000000  000001f0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000007d2  00000000  00000000  00000248  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000067f  00000000  00000000  00000a1a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000003dc  00000000  00000000  00001099  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000080  00000000  00000000  00001478  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000003ba  00000000  00000000  000014f8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000000ff  00000000  00000000  000018b2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000038  00000000  00000000  000019b1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 45 00 	call	0x8a	; 0x8a <main>
+  64:	0c 94 96 00 	jmp	0x12c	; 0x12c <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <SPI_Decoder_Send_Data>:
+#include <util/delay.h>
+
+
+
+void SPI_Decoder_Send_Data(uint8_t cmd, uint8_t data)
+{
+  6c:	cf 93       	push	r28
+  6e:	c6 2f       	mov	r28, r22
+	//Send Command
+	Clear_bit(PORTB, SS);		//make slave_select(SS) low
+  70:	98 b3       	in	r25, 0x18	; 24
+  72:	9f 7e       	andi	r25, 0xEF	; 239
+  74:	98 bb       	out	0x18, r25	; 24
+	SPI_Send_Data(cmd);
+  76:	0e 94 92 00 	call	0x124	; 0x124 <SPI_Send_Data>
+	//Send Data
+	SPI_Send_Data(data);
+  7a:	8c 2f       	mov	r24, r28
+  7c:	0e 94 92 00 	call	0x124	; 0x124 <SPI_Send_Data>
+	Set_bit(PORTB,SS);			//make slave_select(SS) high
+  80:	88 b3       	in	r24, 0x18	; 24
+  82:	80 61       	ori	r24, 0x10	; 16
+  84:	88 bb       	out	0x18, r24	; 24
+}
+  86:	cf 91       	pop	r28
+  88:	08 95       	ret
+
+0000008a <main>:
+
+int main(void)
+{
+	int seg_no, seg_data = 0;
+	SPI_INIT();
+  8a:	0e 94 70 00 	call	0xe0	; 0xe0 <SPI_INIT>
+	SPI_Decoder_Send_Data(0x09,0xFF);		//decode all displays
+  8e:	6f ef       	ldi	r22, 0xFF	; 255
+  90:	89 e0       	ldi	r24, 0x09	; 9
+  92:	0e 94 36 00 	call	0x6c	; 0x6c <SPI_Decoder_Send_Data>
+	SPI_Decoder_Send_Data(0x0B,0x07);		//Set scan limit(from digit 0 to digit 7)
+  96:	67 e0       	ldi	r22, 0x07	; 7
+  98:	8b e0       	ldi	r24, 0x0B	; 11
+  9a:	0e 94 36 00 	call	0x6c	; 0x6c <SPI_Decoder_Send_Data>
+	SPI_Decoder_Send_Data(0x0A,0x0F);		//Max intensity
+  9e:	6f e0       	ldi	r22, 0x0F	; 15
+  a0:	8a e0       	ldi	r24, 0x0A	; 10
+  a2:	0e 94 36 00 	call	0x6c	; 0x6c <SPI_Decoder_Send_Data>
+	SPI_Decoder_Send_Data(0x0C,0x01);		//Normal Operation Mode (Turn on Display)
+  a6:	61 e0       	ldi	r22, 0x01	; 1
+  a8:	8c e0       	ldi	r24, 0x0C	; 12
+  aa:	0e 94 36 00 	call	0x6c	; 0x6c <SPI_Decoder_Send_Data>
+	Set_bit(PORTB,SS);			//make slave_select(SS) high
+}
+
+int main(void)
+{
+	int seg_no, seg_data = 0;
+  ae:	00 e0       	ldi	r16, 0x00	; 0
+  b0:	10 e0       	ldi	r17, 0x00	; 0
+	SPI_Decoder_Send_Data(0x0B,0x07);		//Set scan limit(from digit 0 to digit 7)
+	SPI_Decoder_Send_Data(0x0A,0x0F);		//Max intensity
+	SPI_Decoder_Send_Data(0x0C,0x01);		//Normal Operation Mode (Turn on Display)
+    while (1) 
+    {
+		for(seg_no=1; seg_no <=8; seg_no++,seg_data++)
+  b2:	c1 e0       	ldi	r28, 0x01	; 1
+  b4:	d0 e0       	ldi	r29, 0x00	; 0
+  b6:	10 c0       	rjmp	.+32     	; 0xd8 <main+0x4e>
+		{
+			SPI_Decoder_Send_Data(seg_no,seg_data);
+  b8:	60 2f       	mov	r22, r16
+  ba:	8c 2f       	mov	r24, r28
+  bc:	0e 94 36 00 	call	0x6c	; 0x6c <SPI_Decoder_Send_Data>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  c0:	2f e9       	ldi	r18, 0x9F	; 159
+  c2:	86 e8       	ldi	r24, 0x86	; 134
+  c4:	91 e0       	ldi	r25, 0x01	; 1
+  c6:	21 50       	subi	r18, 0x01	; 1
+  c8:	80 40       	sbci	r24, 0x00	; 0
+  ca:	90 40       	sbci	r25, 0x00	; 0
+  cc:	e1 f7       	brne	.-8      	; 0xc6 <main+0x3c>
+  ce:	00 c0       	rjmp	.+0      	; 0xd0 <main+0x46>
+  d0:	00 00       	nop
+	SPI_Decoder_Send_Data(0x0B,0x07);		//Set scan limit(from digit 0 to digit 7)
+	SPI_Decoder_Send_Data(0x0A,0x0F);		//Max intensity
+	SPI_Decoder_Send_Data(0x0C,0x01);		//Normal Operation Mode (Turn on Display)
+    while (1) 
+    {
+		for(seg_no=1; seg_no <=8; seg_no++,seg_data++)
+  d2:	21 96       	adiw	r28, 0x01	; 1
+  d4:	0f 5f       	subi	r16, 0xFF	; 255
+  d6:	1f 4f       	sbci	r17, 0xFF	; 255
+  d8:	c9 30       	cpi	r28, 0x09	; 9
+  da:	d1 05       	cpc	r29, r1
+  dc:	6c f3       	brlt	.-38     	; 0xb8 <main+0x2e>
+  de:	e9 cf       	rjmp	.-46     	; 0xb2 <main+0x28>
+
+000000e0 <SPI_INIT>:
+
+
+void SPI_INIT(void)
+{
+	//Enable SPI
+	Set_bit(SPCR, 6);
+  e0:	8d b1       	in	r24, 0x0d	; 13
+  e2:	80 64       	ori	r24, 0x40	; 64
+  e4:	8d b9       	out	0x0d, r24	; 13
+	//bit order -->from MSB to LSB
+	//Set_bit(SPCR, 5);
+	Clear_bit(SPCR, 5);
+  e6:	8d b1       	in	r24, 0x0d	; 13
+  e8:	8f 7d       	andi	r24, 0xDF	; 223
+  ea:	8d b9       	out	0x0d, r24	; 13
+	//Select SPI mode Master or Slave
+	#ifdef MASTER_MODE
+	Set_bit(SPCR, 4);
+  ec:	8d b1       	in	r24, 0x0d	; 13
+  ee:	80 61       	ori	r24, 0x10	; 16
+  f0:	8d b9       	out	0x0d, r24	; 13
+	Set_bit(DDRB,MOSI);				//set MOSI as output
+  f2:	87 b3       	in	r24, 0x17	; 23
+  f4:	80 62       	ori	r24, 0x20	; 32
+  f6:	87 bb       	out	0x17, r24	; 23
+	Clear_bit(DDRB,MISO);			//set MISO as input
+  f8:	87 b3       	in	r24, 0x17	; 23
+  fa:	8f 7b       	andi	r24, 0xBF	; 191
+  fc:	87 bb       	out	0x17, r24	; 23
+	Set_bit(DDRB,SCK);				//set SCK as output
+  fe:	87 b3       	in	r24, 0x17	; 23
+ 100:	80 68       	ori	r24, 0x80	; 128
+ 102:	87 bb       	out	0x17, r24	; 23
+	Set_bit(DDRB,SS);				//set SS as output
+ 104:	87 b3       	in	r24, 0x17	; 23
+ 106:	80 61       	ori	r24, 0x10	; 16
+ 108:	87 bb       	out	0x17, r24	; 23
+	Set_bit(DDRB,MISO);				//set MISO as output
+	Clear_bit(DDRB,SCK);			//set SCK as input
+	Clear_bit(DDRB,SS);				//set SS as input
+	#endif
+	//select clock polarity -->leading edge = rising
+	Clear_bit(SPCR, 3);		
+ 10a:	8d b1       	in	r24, 0x0d	; 13
+ 10c:	87 7f       	andi	r24, 0xF7	; 247
+ 10e:	8d b9       	out	0x0d, r24	; 13
+	//select clock phase -->sample on leading edge
+	Clear_bit(SPCR, 2);	
+ 110:	8d b1       	in	r24, 0x0d	; 13
+ 112:	8b 7f       	andi	r24, 0xFB	; 251
+ 114:	8d b9       	out	0x0d, r24	; 13
+	//select clock rate -->FOSC/4
+	Clear_bit(SPCR, 1);
+ 116:	8d b1       	in	r24, 0x0d	; 13
+ 118:	8d 7f       	andi	r24, 0xFD	; 253
+ 11a:	8d b9       	out	0x0d, r24	; 13
+	Clear_bit(SPCR, 0);
+ 11c:	8d b1       	in	r24, 0x0d	; 13
+ 11e:	8e 7f       	andi	r24, 0xFE	; 254
+ 120:	8d b9       	out	0x0d, r24	; 13
+ 122:	08 95       	ret
+
+00000124 <SPI_Send_Data>:
+}
+
+
+void SPI_Send_Data(uint8_t data)
+{
+	SPDR = data;
+ 124:	8f b9       	out	0x0f, r24	; 15
+	//wait for SPIF to be set
+	while(! (SPSR & (1<<7)));
+ 126:	77 9b       	sbis	0x0e, 7	; 14
+ 128:	fe cf       	rjmp	.-4      	; 0x126 <SPI_Send_Data+0x2>
+}
+ 12a:	08 95       	ret
+
+0000012c <_exit>:
+ 12c:	f8 94       	cli
+
+0000012e <__stop_program>:
+ 12e:	ff cf       	rjmp	.-2      	; 0x12e <__stop_program>
