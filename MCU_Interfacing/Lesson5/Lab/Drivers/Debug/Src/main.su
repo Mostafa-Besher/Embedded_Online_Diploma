@@ -1,0 +1,4 @@
+main.c:34:6:SPI1_Interrupt_Handler	16	static
+main.c:48:6:Usart_Interrupt_Handler	8	static
+main.c:62:6:clock_init	4	static
+main.c:73:5:main	64	static
