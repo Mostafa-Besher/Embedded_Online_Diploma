@@ -1,0 +1,324 @@
+
+Timers.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000212  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000286  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          0000000b  00800060  00800060  00000286  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000286  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002b8  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000080  00000000  00000000  000002f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   0000083d  00000000  00000000  00000374  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 0000068d  00000000  00000000  00000bb1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000003ea  00000000  00000000  0000123e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000174  00000000  00000000  00001628  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000456  00000000  00000000  0000179c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000272  00000000  00000000  00001bf2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000060  00000000  00000000  00001e64  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 e0 00 	jmp	0x1c0	; 0x1c0 <__vector_10>
+  2c:	0c 94 b9 00 	jmp	0x172	; 0x172 <__vector_11>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	ab 36       	cpi	r26, 0x6B	; 107
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 63 00 	call	0xc6	; 0xc6 <main>
+  74:	0c 94 07 01 	jmp	0x20e	; 0x20e <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <Timer_CompareMatch_Interrupt_Handler>:
+	if(timer_counter == 3921)
+	{
+		//Toggle Led every one second
+		Toggle_bit(PORTD, 0);
+		//Clear Counter
+		timer_counter = 0;
+  7c:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+  80:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+  84:	a0 91 62 00 	lds	r26, 0x0062	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+  88:	b0 91 63 00 	lds	r27, 0x0063	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+  8c:	01 96       	adiw	r24, 0x01	; 1
+  8e:	a1 1d       	adc	r26, r1
+  90:	b1 1d       	adc	r27, r1
+  92:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__DATA_REGION_ORIGIN__>
+  96:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+  9a:	a0 93 62 00 	sts	0x0062, r26	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+  9e:	b0 93 63 00 	sts	0x0063, r27	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+  a2:	80 31       	cpi	r24, 0x10	; 16
+  a4:	97 42       	sbci	r25, 0x27	; 39
+  a6:	a1 05       	cpc	r26, r1
+  a8:	b1 05       	cpc	r27, r1
+  aa:	61 f4       	brne	.+24     	; 0xc4 <Timer_CompareMatch_Interrupt_Handler+0x48>
+  ac:	92 b3       	in	r25, 0x12	; 18
+  ae:	81 e0       	ldi	r24, 0x01	; 1
+  b0:	89 27       	eor	r24, r25
+  b2:	82 bb       	out	0x12, r24	; 18
+  b4:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <__DATA_REGION_ORIGIN__>
+  b8:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+  bc:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+  c0:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+  c4:	08 95       	ret
+
+000000c6 <main>:
+	}
+}
+
+
+int main(void)
+{
+  c6:	cf 93       	push	r28
+  c8:	df 93       	push	r29
+  ca:	00 d0       	rcall	.+0      	; 0xcc <main+0x6>
+  cc:	00 d0       	rcall	.+0      	; 0xce <main+0x8>
+  ce:	1f 92       	push	r1
+  d0:	cd b7       	in	r28, 0x3d	; 61
+  d2:	de b7       	in	r29, 0x3e	; 62
+	//Configure PIND0 as Output
+    Set_bit(DDRD, 0);
+  d4:	81 b3       	in	r24, 0x11	; 17
+  d6:	81 60       	ori	r24, 0x01	; 1
+  d8:	81 bb       	out	0x11, r24	; 17
+	//set compare value
+	MCAL_SetTimer_compare_val(100);
+  da:	84 e6       	ldi	r24, 0x64	; 100
+  dc:	0e 94 b7 00 	call	0x16e	; 0x16e <MCAL_SetTimer_compare_val>
+	//set timer configuration
+	TIMER_CONFIG_t timer_cfg;
+	timer_cfg.Timer_Mode = TIMER_MODE_CTC;
+  e0:	88 e0       	ldi	r24, 0x08	; 8
+  e2:	89 83       	std	Y+1, r24	; 0x01
+	timer_cfg.Clock_Source = CLOCK_SOURCE_INTERNAL_PRESCALER_DIVIDED_BY_8;
+  e4:	82 e0       	ldi	r24, 0x02	; 2
+  e6:	8a 83       	std	Y+2, r24	; 0x02
+	timer_cfg.IRQ_Enable = IRQ_ENABLE_OCIE0;
+  e8:	8b 83       	std	Y+3, r24	; 0x03
+	timer_cfg.P_CallBack = Timer_CompareMatch_Interrupt_Handler;
+  ea:	8e e3       	ldi	r24, 0x3E	; 62
+  ec:	90 e0       	ldi	r25, 0x00	; 0
+  ee:	9d 83       	std	Y+5, r25	; 0x05
+  f0:	8c 83       	std	Y+4, r24	; 0x04
+	MCAL_Timer_Init(&timer_cfg);
+  f2:	ce 01       	movw	r24, r28
+  f4:	01 96       	adiw	r24, 0x01	; 1
+  f6:	0e 94 7e 00 	call	0xfc	; 0xfc <MCAL_Timer_Init>
+  fa:	ff cf       	rjmp	.-2      	; 0xfa <main+0x34>
+
+000000fc <MCAL_Timer_Init>:
+void MCAL_PWM_DutyCycle(uint8_t duty_cycle)
+{
+	if(Global_Timer_Config.Timer_Mode == TIMER_MODE_FAST_PWM_NONINVERTING)
+		OCR0 = duty_cycle;
+	else if(Global_Timer_Config.Timer_Mode == TIMER_MODE_FAST_PWM_INVERTING)
+		OCR0 = (uint8_t)(255 - duty_cycle);
+  fc:	cf 93       	push	r28
+  fe:	df 93       	push	r29
+ 100:	ec 01       	movw	r28, r24
+ 102:	85 e0       	ldi	r24, 0x05	; 5
+ 104:	fe 01       	movw	r30, r28
+ 106:	a6 e6       	ldi	r26, 0x66	; 102
+ 108:	b0 e0       	ldi	r27, 0x00	; 0
+ 10a:	01 90       	ld	r0, Z+
+ 10c:	0d 92       	st	X+, r0
+ 10e:	8a 95       	dec	r24
+ 110:	e1 f7       	brne	.-8      	; 0x10a <MCAL_Timer_Init+0xe>
+ 112:	93 b7       	in	r25, 0x33	; 51
+ 114:	88 81       	ld	r24, Y
+ 116:	89 2b       	or	r24, r25
+ 118:	83 bf       	out	0x33, r24	; 51
+ 11a:	88 81       	ld	r24, Y
+ 11c:	88 37       	cpi	r24, 0x78	; 120
+ 11e:	11 f0       	breq	.+4      	; 0x124 <MCAL_Timer_Init+0x28>
+ 120:	88 36       	cpi	r24, 0x68	; 104
+ 122:	19 f4       	brne	.+6      	; 0x12a <MCAL_Timer_Init+0x2e>
+ 124:	87 b3       	in	r24, 0x17	; 23
+ 126:	88 60       	ori	r24, 0x08	; 8
+ 128:	87 bb       	out	0x17, r24	; 23
+ 12a:	93 b7       	in	r25, 0x33	; 51
+ 12c:	89 81       	ldd	r24, Y+1	; 0x01
+ 12e:	89 2b       	or	r24, r25
+ 130:	83 bf       	out	0x33, r24	; 51
+ 132:	89 81       	ldd	r24, Y+1	; 0x01
+ 134:	86 50       	subi	r24, 0x06	; 6
+ 136:	82 30       	cpi	r24, 0x02	; 2
+ 138:	18 f4       	brcc	.+6      	; 0x140 <MCAL_Timer_Init+0x44>
+ 13a:	87 b3       	in	r24, 0x17	; 23
+ 13c:	8e 7f       	andi	r24, 0xFE	; 254
+ 13e:	87 bb       	out	0x17, r24	; 23
+ 140:	99 b7       	in	r25, 0x39	; 57
+ 142:	8a 81       	ldd	r24, Y+2	; 0x02
+ 144:	89 2b       	or	r24, r25
+ 146:	89 bf       	out	0x39, r24	; 57
+ 148:	8a 81       	ldd	r24, Y+2	; 0x02
+ 14a:	88 23       	and	r24, r24
+ 14c:	21 f0       	breq	.+8      	; 0x156 <MCAL_Timer_Init+0x5a>
+ 14e:	8f b7       	in	r24, 0x3f	; 63
+ 150:	80 68       	ori	r24, 0x80	; 128
+ 152:	8f bf       	out	0x3f, r24	; 63
+ 154:	03 c0       	rjmp	.+6      	; 0x15c <MCAL_Timer_Init+0x60>
+ 156:	8f b7       	in	r24, 0x3f	; 63
+ 158:	8f 77       	andi	r24, 0x7F	; 127
+ 15a:	8f bf       	out	0x3f, r24	; 63
+ 15c:	8b 81       	ldd	r24, Y+3	; 0x03
+ 15e:	9c 81       	ldd	r25, Y+4	; 0x04
+ 160:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <GP_CallBack+0x1>
+ 164:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <GP_CallBack>
+ 168:	df 91       	pop	r29
+ 16a:	cf 91       	pop	r28
+ 16c:	08 95       	ret
+
+0000016e <MCAL_SetTimer_compare_val>:
+ 16e:	8c bf       	out	0x3c, r24	; 60
+ 170:	08 95       	ret
+
+00000172 <__vector_11>:
+ *
+*/
+
+//OVERFLOW ISR
+ISR(TIMER0_OVF_vect)
+{
+ 172:	1f 92       	push	r1
+ 174:	0f 92       	push	r0
+ 176:	0f b6       	in	r0, 0x3f	; 63
+ 178:	0f 92       	push	r0
+ 17a:	11 24       	eor	r1, r1
+ 17c:	2f 93       	push	r18
+ 17e:	3f 93       	push	r19
+ 180:	4f 93       	push	r20
+ 182:	5f 93       	push	r21
+ 184:	6f 93       	push	r22
+ 186:	7f 93       	push	r23
+ 188:	8f 93       	push	r24
+ 18a:	9f 93       	push	r25
+ 18c:	af 93       	push	r26
+ 18e:	bf 93       	push	r27
+ 190:	ef 93       	push	r30
+ 192:	ff 93       	push	r31
+	GP_CallBack();
+ 194:	e0 91 64 00 	lds	r30, 0x0064	; 0x800064 <GP_CallBack>
+ 198:	f0 91 65 00 	lds	r31, 0x0065	; 0x800065 <GP_CallBack+0x1>
+ 19c:	09 95       	icall
+}
+ 19e:	ff 91       	pop	r31
+ 1a0:	ef 91       	pop	r30
+ 1a2:	bf 91       	pop	r27
+ 1a4:	af 91       	pop	r26
+ 1a6:	9f 91       	pop	r25
+ 1a8:	8f 91       	pop	r24
+ 1aa:	7f 91       	pop	r23
+ 1ac:	6f 91       	pop	r22
+ 1ae:	5f 91       	pop	r21
+ 1b0:	4f 91       	pop	r20
+ 1b2:	3f 91       	pop	r19
+ 1b4:	2f 91       	pop	r18
+ 1b6:	0f 90       	pop	r0
+ 1b8:	0f be       	out	0x3f, r0	; 63
+ 1ba:	0f 90       	pop	r0
+ 1bc:	1f 90       	pop	r1
+ 1be:	18 95       	reti
+
+000001c0 <__vector_10>:
+
+//COMPARE MATCH ISR
+ISR(TIMER0_COMP_vect)
+{
+ 1c0:	1f 92       	push	r1
+ 1c2:	0f 92       	push	r0
+ 1c4:	0f b6       	in	r0, 0x3f	; 63
+ 1c6:	0f 92       	push	r0
+ 1c8:	11 24       	eor	r1, r1
+ 1ca:	2f 93       	push	r18
+ 1cc:	3f 93       	push	r19
+ 1ce:	4f 93       	push	r20
+ 1d0:	5f 93       	push	r21
+ 1d2:	6f 93       	push	r22
+ 1d4:	7f 93       	push	r23
+ 1d6:	8f 93       	push	r24
+ 1d8:	9f 93       	push	r25
+ 1da:	af 93       	push	r26
+ 1dc:	bf 93       	push	r27
+ 1de:	ef 93       	push	r30
+ 1e0:	ff 93       	push	r31
+	GP_CallBack();
+ 1e2:	e0 91 64 00 	lds	r30, 0x0064	; 0x800064 <GP_CallBack>
+ 1e6:	f0 91 65 00 	lds	r31, 0x0065	; 0x800065 <GP_CallBack+0x1>
+ 1ea:	09 95       	icall
+ 1ec:	ff 91       	pop	r31
+ 1ee:	ef 91       	pop	r30
+ 1f0:	bf 91       	pop	r27
+ 1f2:	af 91       	pop	r26
+ 1f4:	9f 91       	pop	r25
+ 1f6:	8f 91       	pop	r24
+ 1f8:	7f 91       	pop	r23
+ 1fa:	6f 91       	pop	r22
+ 1fc:	5f 91       	pop	r21
+ 1fe:	4f 91       	pop	r20
+ 200:	3f 91       	pop	r19
+ 202:	2f 91       	pop	r18
+ 204:	0f 90       	pop	r0
+ 206:	0f be       	out	0x3f, r0	; 63
+ 208:	0f 90       	pop	r0
+ 20a:	1f 90       	pop	r1
+ 20c:	18 95       	reti
+
+0000020e <_exit>:
+ 20e:	f8 94       	cli
+
+00000210 <__stop_program>:
+ 210:	ff cf       	rjmp	.-2      	; 0x210 <__stop_program>
